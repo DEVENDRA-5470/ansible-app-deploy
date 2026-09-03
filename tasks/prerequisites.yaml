@@ -1,0 +1,44 @@
+---
+- name: Update Apt Package
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Install Required Deployement Tools
+  ansible.builtin.apt:
+    name:
+      - git
+      - docker.io
+      - docker-compose-v2
+    state: present
+
+- name: Ensure Docker service is running and enabled
+  ansible.builtin.service:
+    name: docker
+    state: started
+    enabled: true
+
+- name: Verify Git intallation
+  ansible.builtin.command:
+    cmd: git --version
+  register: git_version
+  changed_when: false
+
+- name: Verify Docker intallation
+  ansible.builtin.command:
+    cmd: docker --version
+  register: docker_version
+  changed_when: false
+
+- name: Verify Compose intallation
+  ansible.builtin.command:
+    cmd: docker compose version
+  register: docker_compose_version
+  changed_when: false
+
+- name: Display installed Tools
+  ansible.builtin.debug:
+    msg: 
+      - "{{ git_version.stdout }}"
+      - "{{ docker_version.stdout }}"
+      - "{{ docker_compose_version.stdout }}"

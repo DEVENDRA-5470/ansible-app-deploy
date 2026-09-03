@@ -1,0 +1,12 @@
+--- 
+- name: Install Deployement Prerequisites
+  hosts: flask_servers
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Run Prerequisites Installation
+      ansible.builtin.import_tasks: ../tasks/prerequisites.yaml
+
+    - name: Deploy Course Store Repository
+      ansible.builtin.import_tasks: ../tasks/repository.yaml
